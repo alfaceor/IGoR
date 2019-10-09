@@ -5,7 +5,10 @@
 
 # Ignore Netbeans config files
 nbproject
+
+# ignore test files
 tests
+pygor3/uchicago
 
 
 # Ignore the compiled object files
