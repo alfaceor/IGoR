@@ -9,6 +9,11 @@ nbproject
 # ignore test files
 tests
 pygor3/uchicago
+pygor3/*.fasta
+pygor3/*.pdf
+pygor3/*.png
+pygor3/*.db
+pygor3/run.info
 
 
 # Ignore the compiled object files
