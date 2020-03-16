@@ -7,7 +7,7 @@ Created on Mon Nov 25 11:01:59 2019
 """
 
 batchname = "TRbeta"
-strWD="ReDoTRbeta/"
+strWD="../tests/ReDoTRbeta/"
 IgorSpecie    = "mouse"
 IgorChain     = "tcr_beta"
 
