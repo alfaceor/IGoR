@@ -49,6 +49,7 @@ public:
     unordered_map<string, string> UMap_j_genomic;
     unordered_map<string, size_t> UMap_v_CDR3_anchors; 
     unordered_map<string, size_t> UMap_j_CDR3_anchors;
+    string strCSVdelimiter = ";";
 //    vector<pair<const int, const string>> *p_indexed_seqlist;
     unordered_map<int,pair<string,unordered_map<Gene_class,vector<Alignment_data>>>>  *p_sorted_alignments;
     
@@ -67,7 +68,14 @@ public:
     int getVAnchor4Seq(string seq_str, Alignment_data v_alig);
     int getJAnchor4Seq(string seq_str, Alignment_data j_alig);
     
+    string getVhitGene(int seq_index);
+    string getJhitGene(int seq_index);
+    
     string generateCDR3_csv_line(CDR3SeqData cdr3InputSeq);
+    
+    string generateBestVJ(int seq_index);
+    
+    string generateNoMutatedSeq(int seq_index);
 private:
 
 };

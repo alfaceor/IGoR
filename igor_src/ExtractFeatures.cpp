@@ -33,6 +33,7 @@ ExtractFeatures::ExtractFeatures(const ExtractFeatures& orig) {
 
 ExtractFeatures::~ExtractFeatures() {
 }
+
 /**
  * \brief Function to map the templateID and the sequence for V and J.
  * \param v_genomic vector with the genomic templates for V genes
@@ -214,7 +215,6 @@ int ExtractFeatures::getJAnchor4Seq(string seq_str, Alignment_data j_alig){
  */
 string ExtractFeatures::generateCDR3_csv_line(CDR3SeqData cdr3InputSeq){
 	// seq_index;v_anchor;j_anchor;CDR3nt;CDR3aa
-	string strCSVdelimiter = ";";
 	string seq_str = (*p_sorted_alignments)[cdr3InputSeq.seq_index].first;
 	
 	stringstream sstm;
@@ -240,3 +240,69 @@ string ExtractFeatures::generateCDR3_csv_line(CDR3SeqData cdr3InputSeq){
 	
 }
 
+
+
+string ExtractFeatures::getVhitGene(int seq_index) {
+	vector<Alignment_data> Vec_V_Alignment_data = ((*p_sorted_alignments)[seq_index].second )[V_gene];
+	if ( Vec_V_Alignment_data.size() > 0 ){
+		Alignment_data v_alig = Vec_V_Alignment_data.front();
+		return strCSVdelimiter+v_alig.gene_name;
+		
+	}else{
+		return  strCSVdelimiter;
+	}
+}
+
+
+string ExtractFeatures::getJhitGene(int seq_index) {
+	vector<Alignment_data> Vec_J_Alignment_data = ((*p_sorted_alignments)[seq_index].second )[J_gene];
+	if ( Vec_J_Alignment_data.size() > 0 ){
+		Alignment_data j_alig = Vec_J_Alignment_data.front();
+		return strCSVdelimiter+j_alig.gene_name;
+		
+	}else{
+		return  strCSVdelimiter;
+	}
+}
+
+// FIXME: finish this method
+/**
+ * 
+ * @param seq_index
+ * @return should return the sequence related to the alignment.
+ */
+string ExtractFeatures::generateNoMutatedSeq(int seq_index){
+	stringstream sstm;
+	sstm.str("");
+	
+	string seq_str = (*p_sorted_alignments)[seq_index].first;
+	sstm << seq_index << strCSVdelimiter;
+	sstm << seq_str << strCSVdelimiter;
+		
+	vector<Alignment_data> Vec_V_Alignment_data = ((*p_sorted_alignments)[seq_index].second )[V_gene];
+	// If V alignment was found then get the corresponding V CDR3 anchor
+	if ( Vec_V_Alignment_data.size() > 0 ){
+		Alignment_data v_alig = Vec_V_Alignment_data.front();
+		string v_seq = UMap_v_genomic[v_alig.gene_name];
+		
+		sstm << v_seq.substr(-v_alig.offset) << strCSVdelimiter;
+		sstm << v_alig.offset << strCSVdelimiter;
+		
+		
+		for(auto mis : v_alig.mismatches){
+			std::cout << mis << strCSVdelimiter << v_seq[mis] << strCSVdelimiter << seq_str[mis] << endl;
+		}
+		
+	}
+	
+	vector<Alignment_data> Vec_J_Alignment_data = ((*p_sorted_alignments)[seq_index].second )[J_gene];
+	// If V alignment was found then get the corresponding V CDR3 anchor
+	if ( Vec_J_Alignment_data.size() > 0 ){
+		Alignment_data j_alig = Vec_J_Alignment_data.front();
+		string j_seq = UMap_j_genomic[j_alig.gene_name];
+		sstm << std::string(j_alig.offset, '-') << j_seq << strCSVdelimiter;
+		sstm << j_alig.offset << strCSVdelimiter;
+	}
+	
+	return ( ""+ sstm.str() );
+}
